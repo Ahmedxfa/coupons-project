@@ -1,0 +1,133 @@
+// Prisma Schema for Coupons Platform
+// Documentation: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model for authentication and favorites
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  name           String?
+  avatarUrl      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  favoriteStores FavoriteStore[]
+  favoriteDeals  FavoriteDeal[]
+
+  @@map("users")
+}
+
+// Category model for organizing stores
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  icon      String?
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stores    Store[]
+
+  @@index([slug])
+  @@index([featured])
+  @@map("categories")
+}
+
+// Store model
+model Store {
+  id               String          @id @default(uuid())
+  name             String
+  slug             String          @unique
+  logoUrl          String
+  description      String          @db.Text
+  websiteUrl       String
+  categoryId       String
+  category         Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  featured         Boolean         @default(false)
+  domains          String[]        @default([])
+  extensionEnabled Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  deals            Deal[]
+  favoritedBy      FavoriteStore[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([featured])
+  @@map("stores")
+}
+
+// Deal types enum
+enum DealType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SHIPPING
+  BOGO
+  OTHER
+}
+
+// Deal model
+model Deal {
+  id                 String         @id @default(uuid())
+  title              String
+  description        String         @db.Text
+  code               String?
+  type               DealType       @default(OTHER)
+  discountPercentage Int?
+  discountAmount     Decimal?       @db.Decimal(10, 2)
+  expirationDate     DateTime?
+  isExpired          Boolean        @default(false)
+  storeId            String
+  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  featured           Boolean        @default(false)
+  usageCount         Int            @default(0)
+  autoApplicable     Boolean        @default(false)
+  extensionPriority  Int?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  favoritedBy        FavoriteDeal[]
+
+  @@index([storeId])
+  @@index([isExpired])
+  @@index([featured])
+  @@index([expirationDate])
+  @@map("deals")
+}
+
+// Favorite stores junction table
+model FavoriteStore {
+  id        String   @id @default(uuid())
+  userId    String
+  storeId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, storeId])
+  @@index([userId])
+  @@index([storeId])
+  @@map("favorite_stores")
+}
+
+// Favorite deals junction table
+model FavoriteDeal {
+  id        String   @id @default(uuid())
+  userId    String
+  dealId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal      Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, dealId])
+  @@index([userId])
+  @@index([dealId])
+  @@map("favorite_deals")
+}
