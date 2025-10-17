@@ -74,6 +74,7 @@ export default async function SingleStorePage({
       deals: store.deals.map((deal) => ({
         ...deal,
         discountAmount: deal.discountAmount ? deal.discountAmount.toString() : null,
+        expirationDate: deal.expirationDate ? deal.expirationDate.toISOString() : null,
       })),
     };
 
