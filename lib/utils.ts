@@ -16,13 +16,13 @@ export function formatDate(date: Date): string {
 export function formatDiscount(
   type: string,
   percentage?: number | null,
-  amount?: number | null
+  amount?: string | number | null
 ): string {
   if (type === 'PERCENTAGE' && percentage) {
     return `${percentage}% OFF`;
   }
   if (type === 'FIXED_AMOUNT' && amount) {
-    return `$${amount} OFF`;
+    return `${amount} OFF`;
   }
   if (type === 'FREE_SHIPPING') {
     return 'FREE SHIPPING';
