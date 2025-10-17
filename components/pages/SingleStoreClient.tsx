@@ -13,7 +13,7 @@ interface Deal {
   code: string | null;
   type: string;
   discountPercentage: number | null;
-  discountAmount: any; // Can be Decimal or number
+  discountAmount: string | number | null;
   expirationDate: string | null;
   isExpired: boolean;
   featured: boolean;
