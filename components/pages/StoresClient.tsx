@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Store, Heart, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface Category {
   id: string;
