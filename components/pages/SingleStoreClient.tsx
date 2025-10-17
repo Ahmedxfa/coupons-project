@@ -253,8 +253,8 @@ function DealCard({
             >
               {formatDiscount(
                 deal.type,
-                deal.discountPercentage,
-                deal.discountAmount
+                deal.discountPercentage ?? undefined,
+                deal.discountAmount ?? undefined
               )}
             </span>
             {deal.featured && !isExpired && (

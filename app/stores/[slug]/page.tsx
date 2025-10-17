@@ -4,19 +4,20 @@ import SingleStoreClient from '@/components/pages/SingleStoreClient';
 
 export const revalidate = 1800;
 
-export async function generateStaticParams() {
-  try {
-    const stores = await prisma.store.findMany({
-      select: { slug: true },
-    });
-    return stores.map((store) => ({
-      slug: store.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
-}
+// Commented out for Netlify builds - pages will be generated on-demand
+// export async function generateStaticParams() {
+//   try {
+//     const stores = await prisma.store.findMany({
+//       select: { slug: true },
+//     });
+//     return stores.map((store) => ({
+//       slug: store.slug,
+//     }));
+//   } catch (error) {
+//     console.error('Error generating static params:', error);
+//     return [];
+//   }
+// }
 
 export async function generateMetadata({
   params,
