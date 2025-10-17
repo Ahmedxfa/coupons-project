@@ -68,7 +68,16 @@ export default async function SingleStorePage({
       notFound();
     }
 
-    return <SingleStoreClient store={store} />;
+    // Convert Decimal to string for serialization
+    const serializedStore = {
+      ...store,
+      deals: store.deals.map((deal) => ({
+        ...deal,
+        discountAmount: deal.discountAmount ? deal.discountAmount.toString() : null,
+      })),
+    };
+
+    return <SingleStoreClient store={serializedStore} />;
   } catch (error) {
     console.error('Error loading store:', error);
     notFound();
