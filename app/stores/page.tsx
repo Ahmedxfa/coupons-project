@@ -9,7 +9,7 @@ export const metadata = {
   title: 'All Stores | Coupons & Deals',
   description: 'Browse all stores and find the best deals and coupons.',
 };
-
+export tsetr etst setset setet set
 interface PageProps {
   searchParams: Promise<{
     page?: string;
