@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ExternalLink, Store } from 'lucide-react';
 
-export const revalidate = 1800;
+export const revalidate = 1900;
 
 export const metadata = {
   title: 'All Stores | Coupons & Deals',
